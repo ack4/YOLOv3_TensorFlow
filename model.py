@@ -45,7 +45,8 @@ class yolov3(object):
                                 normalizer_fn=slim.batch_norm,
                                 normalizer_params=batch_norm_params,
                                 biases_initializer=None,
-                                activation_fn=lambda x: tf.nn.leaky_relu(x, alpha=0.1),
+                                # activation_fn=lambda x: tf.nn.leaky_relu(x, alpha=0.1),
+                                activation_fn=lambda x: tf.nn.relu(x) - 0.1 * tf.nn.relu(-x),
                                 weights_regularizer=slim.l2_regularizer(self.weight_decay)):
                 with tf.variable_scope('darknet53_body'):
                     route_1, route_2, route_3 = darknet53_body(inputs)

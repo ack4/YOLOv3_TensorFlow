@@ -30,6 +30,16 @@ with tf.Session() as sess:
     load_ops = load_weights(tf.global_variables(scope='yolov3'), weight_path)
     sess.run(load_ops)
     saver.save(sess, save_path=save_path)
+    output_node_names = ['yolov3/yolov3_head/Conv_6/BiasAdd', 'yolov3/yolov3_head/Conv_14/BiasAdd',
+                         'yolov3/yolov3_head/Conv_22/BiasAdd']
+    frozen_graph_def = tf.graph_util.convert_variables_to_constants(
+        sess,
+        sess.graph_def,
+        output_node_names
+    )
+    with open('data/darknet_weights/frozen_graph.pb', 'wb') as f:
+        f.write(frozen_graph_def.SerializeToString())
+
     print('TensorFlow model checkpoint has been saved to {}'.format(save_path))
 
 
